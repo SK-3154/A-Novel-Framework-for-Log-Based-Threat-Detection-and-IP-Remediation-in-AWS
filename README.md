@@ -74,25 +74,25 @@ The system is composed of four logical flows, each with a clearly defined respon
 
 ---
 
-## 🔐 Security & IAM Configuration
+---
 
-This project strictly follows the **Principle of Least Privilege**.
+## 🔐 IAM & Security Model (As Implemented)
 
-### Detection Lambda Role
+This deployment utilizes the pre-provisioned **AWS Learner Lab IAM role (`LabRole`)** as the execution role for both Lambda functions.  
+This design choice ensures smooth deployment within the constrained Learner Lab environment while maintaining secure and functional operation.
 
-* `s3:GetObject` — Restricted to the ALB log bucket
-* `dynamodb:PutItem` — Restricted to the Threats table
-* **No EC2 or VPC modification permissions**
+The assigned role already includes the essential permissions required by the system, including:
 
-### Response Lambda Role
+- **Amazon DynamoDB access** — to store and retrieve detected threat data  
+- **Amazon S3 access** — to read and manage dataset and log objects  
+- **AWS Lambda execution permissions** — for serverless function execution  
+- **Amazon CloudWatch logging** — for centralized logging, monitoring, and debugging  
 
-* `dynamodb:GetItem`, `dynamodb:Scan`
-* `ec2:AuthorizeSecurityGroupIngress`
-* `ec2:CreateNetworkAclEntry`
-
-All permissions are **scoped using resource tags** to prevent unintended infrastructure changes.
+This approach enables consistent behavior across deployments while avoiding unnecessary IAM complexity in a sandboxed academic environment.
 
 ---
+
+
 
 ## 📊 Results
 
@@ -112,6 +112,33 @@ All permissions are **scoped using resource tags** to prevent unintended infrast
 6. Create DynamoDB Threats table with Streams enabled
 7. Deploy Response Lambda triggered by DynamoDB Streams
 8. Configure CloudWatch dashboard
+
+---
+## 📊 System Benefits
+
+The proposed framework offers the following technical and operational advantages:
+
+- **Automated Threat Processing** — Security threats are detected, recorded, and mitigated without manual intervention.
+- **No Always-On Servers** — The system relies entirely on serverless components, eliminating idle infrastructure costs.
+- **High Scalability** — AWS Lambda automatically scales with workload, allowing the system to handle varying traffic volumes efficiently.
+- **Minimal Operational Overhead** — Infrastructure management and maintenance requirements are significantly reduced.
+- **Rapid Response Time** — Event-driven execution enables near real-time threat detection and remediation.
+- **Cloud-Native Architecture** — Built entirely on managed AWS services for reliability, availability, and fault tolerance.
+
+---
+
+## 🧬 Infrastructure Management
+
+All infrastructure components are defined, deployed, and maintained using **Terraform**, ensuring full **Infrasructure-as-Code (IaC)** compliance.
+
+The system supports:
+
+- **Version-controlled infrastructure**
+- **Reproducible deployments**
+- **Safe recovery mechanisms** using Terraform state import
+- **Configuration drift reconciliation** to maintain consistency between declared and actual infrastructure
+
+These capabilities enable professional-grade infrastructure lifecycle management and align the project with modern DevOps best practices.
 
 ---
 
