@@ -133,4 +133,4 @@ All permissions are **scoped using resource tags** to prevent unintended infrast
 
 ## 📬 Contact
 
-For questions, collaboration, or academic use, please contact the authors via Information Technology University (ITU).
+For questions, collaboration, or academic use, please contact the authors.
